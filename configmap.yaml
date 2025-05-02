@@ -1,0 +1,8 @@
+# configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todo-config
+  namespace: project
+data:
+  APP_TITLE: "GevStack - To Do App"

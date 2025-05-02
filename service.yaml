@@ -1,0 +1,14 @@
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-service
+  namespace: project
+spec:
+  selector:
+    app: todo
+  ports:
+    - protocol: TCP
+      port: 80       # ClusterIP port
+      targetPort: 80 # Container port
+  type: ClusterIP    # Internal service (used with Ingress)
