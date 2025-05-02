@@ -26,5 +26,5 @@ jobs:
           cd ~/app   # Navigate to the correct directory (app)
           git pull origin main   # Pull the latest changes
           sudo /usr/local/bin/docker-compose down   # Stop the current containers
-          sudo /usr/local/bin/docker-compose up -d --build --no-cache   # Rebuild with no cache and start containers
+          sudo /usr/local/bin/docker-compose up -d --build   # Rebuild and start containers with the latest code
         EOF
