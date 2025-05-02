@@ -27,6 +27,6 @@ jobs:
           git clone https://github.com/AbdullahAslam1207/devops_project.git ~/app
           cd ~/app
           sudo /usr/local/bin/docker-compose down
-          sudo /usr/local/bin/docker-compose up -d --build --no-cache
+          sudo /usr/local/bin/docker-compose up -d --build 
         EOF
 
