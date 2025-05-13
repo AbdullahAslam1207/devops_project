@@ -1,14 +1,27 @@
-# service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: todo-service
-  namespace: project
+  name: frontend-service
 spec:
   selector:
-    app: todo
+    app: frontend
   ports:
     - protocol: TCP
-      port: 80       # ClusterIP port
-      targetPort: 80 # Container port
-  type: ClusterIP    # Internal service (used with Ingress)
+      port: 8080  # Exposing port 8080 externally
+      targetPort: 80  # Map it to 80 to match the container port
+  type: ClusterIP  # Internal service accessible within the cluster
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: project  # Specify the project namespac
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 8000  # Exposing backend on port 8000
+      targetPort: 8000
+  type: ClusterIP  # Internal service accessible within the cluster
+---

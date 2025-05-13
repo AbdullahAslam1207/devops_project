@@ -1,21 +1,19 @@
-# ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: todo-ingress
-  namespace: project
+  name: frontend-ingress
+  namespace: project  # Specify the project namespac
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: nginx  # Add this line
   rules:
-    - host: todo.local
+    - host: localhost  # Access frontend via localhost on Docker Desktop
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: todo-service
+                name: frontend-service
                 port:
-                  number: 80
+                  number: 8080  # Expose frontend service on port 8080

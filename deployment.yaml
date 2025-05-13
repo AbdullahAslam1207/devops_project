@@ -1,34 +1,45 @@
-# deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: todo-deployment
-  namespace: project
-  labels:
-    app: todo
+  name: frontend
+  namespace: project  # Specify the project namespace
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: todo
+      app: frontend
   template:
     metadata:
       labels:
-        app: todo
+        app: frontend
     spec:
       containers:
-        - name: todo-container
-          image: abdullahaslam007/todo-app:latest # Change if you're pushing to a remote registry
+        - name: frontend
+          image: abdullahaslam007/frontend:latest  # Replace with the actual Docker image
           ports:
-            - containerPort: 80
+            - containerPort: 80  # Nginx serves on port 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: project  # Specify the project namespac
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: abdullahaslam007/backend:latest  # Replace with the actual Docker image
+          ports:
+            - containerPort: 8000  # FastAPI runs on port 8000
           env:
-            - name: APP_TITLE
-              valueFrom:
-                configMapKeyRef:
-                  name: todo-config
-                  key: APP_TITLE
-            - name: API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: todo-secret
-                  key: API_KEY
+            - name: MONGO_URI
+              value: "mongodb://mongodb:27017"  # MongoDB connection string
+---

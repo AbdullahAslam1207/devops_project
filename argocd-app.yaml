@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: devops-project
+  namespace: argocd
+spec:
+  destination:
+    namespace: project  # The namespace you specified
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: 'https://github.com/AbdullahAslam1207/devops_project'  # Your GitHub repo URL
+    targetRevision: HEAD  # Tracks the latest commit in the repository
+    path: ./  # Path to the directory containing Kubernetes manifests
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
