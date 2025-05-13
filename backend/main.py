@@ -66,4 +66,7 @@ def login(user: Login):
 
     return {"message": "Login successful"}
 
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Todo List API!"}
 
