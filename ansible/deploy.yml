@@ -1,0 +1,83 @@
+---
+- name: Deploy FastAPI and Nginx to EC2
+  hosts: ec2
+  become: yes
+
+  tasks:
+    - name: Update apt packages
+      apt:
+        update_cache: yes
+
+    - name: Install dependencies
+      apt:
+        name:
+          - python3
+          - python3-pip
+          - nginx
+        state: present
+
+    - name: Install FastAPI and Uvicorn
+      pip:
+        name:
+          - fastapi
+          - uvicorn[standard]
+
+    - name: Create FastAPI app directory
+      file:
+        path: /home/ubuntu/fastapi_app
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: 0755
+
+    - name: Deploy simple FastAPI app
+      copy:
+        dest: /home/ubuntu/fastapi_app/main.py
+        content: |
+          from fastapi import FastAPI
+          app = FastAPI()
+
+          @app.get("/")
+          def read_root():
+              return {"message": "Hello from FastAPI"}
+
+    - name: Create systemd service for FastAPI
+      copy:
+        dest: /etc/systemd/system/fastapi.service
+        content: |
+          [Unit]
+          Description=FastAPI app
+          After=network.target
+
+          [Service]
+          User=ubuntu
+          WorkingDirectory=/home/ubuntu/fastapi_app
+          ExecStart=/usr/bin/python3 -m uvicorn main:app --host 0.0.0.0 --port 8000
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Reload systemd
+      command: systemctl daemon-reload
+
+    - name: Enable and start FastAPI service
+      systemd:
+        name: fastapi
+        enabled: yes
+        state: started
+
+    - name: Deploy simple HTML website
+      copy:
+        dest: /var/www/html/index.html
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head><title>My Simple Site</title></head>
+          <body><h1>Hello from NGINX!</h1></body>
+          </html>
+
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted
