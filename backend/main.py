@@ -35,7 +35,7 @@ class Login(BaseModel):
     password: str
 
 # Signup endpoint
-@app.post("/signup")
+@app.post("/api/signup")
 def signup(user: User):
     # Check if email already exists
     if users_collection.find_one({"email": user.email}):
@@ -54,7 +54,7 @@ def signup(user: User):
     return {"message": "Signup successful"}
 
 # Login endpoint
-@app.post("/login")
+@app.post("/api/login")
 def login(user: Login):
     # print("Logging in user:")
     found = users_collection.find_one({"email": user.email})

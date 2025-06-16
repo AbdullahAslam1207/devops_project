@@ -16,6 +16,7 @@ spec:
       containers:
         - name: frontend
           image: abdullahaslam007/frontend:latest  # Replace with the actual Docker image
+          imagePullPolicy: Always  # 👈 added this line
           ports:
             - containerPort: 80  # Nginx serves on port 80
 ---
@@ -37,6 +38,7 @@ spec:
       containers:
         - name: backend
           image: abdullahaslam007/backend:latest  # Replace with the actual Docker image
+          imagePullPolicy: Always  # 👈 added this line
           ports:
             - containerPort: 8000  # FastAPI runs on port 8000
           env:
